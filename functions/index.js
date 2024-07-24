@@ -9,8 +9,7 @@ admin.initializeApp();
 
 const db = admin.firestore().collection('todos');
 
-// TODO: create todo
-// TODO: get todo
+//get all
 
 app.get('/todos', (req, res) => {
     db.get()
