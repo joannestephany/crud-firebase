@@ -27,6 +27,7 @@ app.get('/todos', (req, res) => {
     
 });
 
+//create 
 app.post('/todos', (req, res) => {
 
     const newTodo = {
@@ -44,3 +45,26 @@ app.post('/todos', (req, res) => {
 
 exports.api = functions.https.onRequest(app);
 
+//edit
+app.put('/todos/:todoId', (req, res) => {
+    db.doc(req.params.todoId).update({description: req.body.description})
+        .then(function(){
+            res.json({message: 'updated successfully'});
+        })
+        .catch(function(err){
+            logger.error(err);
+            res.status(500).json({error: 'something went wrong'});
+        });
+});
+
+//delete
+app.delete('/todos/:todoId', (req, res) => {
+    db.doc(req.params.todoId).delete()
+        .then(function(){
+            res.json({message: 'deleted successfully'});
+        })
+        .catch(function(err){
+            logger.error(err);
+            res.status(500).json({error: 'something went wrong'});
+        });
+});
