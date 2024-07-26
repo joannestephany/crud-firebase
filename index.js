@@ -8,7 +8,7 @@ const db = admin.firestore().collection("todos");
 // TODO: create todoList
 // TODO: remove todoList
 
-
+// mostra todas as tarefas
 app.get("/todos", function (request, response) {
   db.get()
     .then(function (docs) {
@@ -23,10 +23,27 @@ app.get("/todos", function (request, response) {
     });
 })
 
+// adiciona uma nova tarefa
 app.post("/todos", function (request, response) {
   db.add({ description: request.body.description })
     .then(function () {
       response.json({ general: "Works" });
+    })
+})
+
+// deleta uma tarefa
+app.delete("/todos/:todoId", function (request, response) {
+  db.doc(request.params.todoId).delete()
+    .then(function () {
+      response.json({ general: "Deleted" });
+    })
+})
+
+// edita uma tarefa
+app.put("/todos/:todoId", function (request, response) {
+  db.doc(request.params.todoId).update({ description: request.body.description })
+    .then(function () {
+      response.json({ general: "Updated" });
     })
 })
 

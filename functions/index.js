@@ -21,7 +21,8 @@ app.get('/todos', (req, res) => {
             docs.forEach(function (doc) {
                 todos.push({
                     id: doc.id,
-                    description: doc.data().description
+                    description: doc.data().description,
+                    done: doc.data().done
                 });
             })
             res.json(todos);
@@ -33,7 +34,8 @@ app.get('/todos', (req, res) => {
 app.post('/todos', (req, res) => {
 
     const newTodo = {
-        description: req.body.description
+        description: req.body.description,
+        done: false
     }
     db.add(newTodo)
         .then(function (doc) {
