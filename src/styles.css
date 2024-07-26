@@ -10,6 +10,12 @@ body{
     background-color: #002033;
 }
 
+h1 {
+    text-align: center;
+    color: #ffffff;
+    margin-top: 50px;
+}
+
 .container {
     background-color: #d1d1d1;
     width: 500px;
@@ -30,7 +36,7 @@ body{
     border: none;
     border-radius: 5px;
     height: 40px;
-    background-color: #003329;
+    background-color: #019b7c;
     color: #ffffff;
     font-size: 17px;
     padding: 0 15px;
@@ -77,6 +83,6 @@ img {
 }
 
 .done {
-    background-color: #8fac55;
+    background-color: #64b146;
     text-decoration: line-through;
 }

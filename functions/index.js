@@ -1,21 +1,24 @@
-const {onRequest} = require("firebase-functions/v2/https");
+const { onRequest } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
 const functions = require("firebase-functions");
-
-const app = require('express')();
-
+const cors = require("cors");
 const admin = require('firebase-admin');
-admin.initializeApp();
+const express = require('express');
 
+
+admin.initializeApp();
 const db = admin.firestore().collection('todos');
 
-//get all
+const app = require('express')();
+app.use(cors({ origin: true }));
+app.use(express.json());
 
+//get all
 app.get('/todos', (req, res) => {
     db.get()
-        .then(function(docs){
+        .then(function (docs) {
             let todos = [];
-            docs.forEach(function(doc){
+            docs.forEach(function (doc) {
                 todos.push({
                     id: doc.id,
                     description: doc.data().description
@@ -23,7 +26,7 @@ app.get('/todos', (req, res) => {
             })
             res.json(todos);
         })
-    
+
 });
 
 //create 
@@ -33,12 +36,12 @@ app.post('/todos', (req, res) => {
         description: req.body.description
     }
     db.add(newTodo)
-        .then(function(doc){
-            res.json({message: `document ${doc.id} created successfully`});
+        .then(function (doc) {
+            res.json({ message: `document ${doc.id} created successfully` });
         })
-        .catch(function(err){
+        .catch(function (err) {
             logger.error(err);
-            res.status(500).json({error: 'something went wrong'});
+            res.status(500).json({ error: 'something went wrong' });
         });
 });
 
@@ -46,24 +49,24 @@ exports.api = functions.https.onRequest(app);
 
 //edit
 app.put('/todos/:todoId', (req, res) => {
-    db.doc(req.params.todoId).update({description: req.body.description})
-        .then(function(){
-            res.json({message: 'updated successfully'});
+    db.doc(req.params.todoId).update({ description: req.body.description })
+        .then(function () {
+            res.json({ message: 'updated successfully' });
         })
-        .catch(function(err){
+        .catch(function (err) {
             logger.error(err);
-            res.status(500).json({error: 'something went wrong'});
+            res.status(500).json({ error: 'something went wrong' });
         });
 });
 
 //delete
 app.delete('/todos/:todoId', (req, res) => {
     db.doc(req.params.todoId).delete()
-        .then(function(){
-            res.json({message: 'deleted successfully'});
+        .then(function () {
+            res.json({ message: 'deleted successfully' });
         })
-        .catch(function(err){
+        .catch(function (err) {
             logger.error(err);
-            res.status(500).json({error: 'something went wrong'});
+            res.status(500).json({ error: 'something went wrong' });
         });
 });
