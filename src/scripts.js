@@ -18,10 +18,6 @@ async function adicionarNovaTarefa() {
         }),
     })
 
-    // minhaListaDeItens.push({
-    //     tarefa: input.value,
-    //     concluida: false,
-    // });
     input.value = '';
 
     mostrarTarefas()
@@ -30,7 +26,6 @@ async function adicionarNovaTarefa() {
 
 async function mostrarTarefas() {
     let novaLi = ''
-    // adiciona a tarefa na lista vindo do back
 
     await fetch("https://us-central1-crud-firebase-4bea8.cloudfunctions.net/api/todos")
         .then((response) => response.json())
@@ -44,22 +39,15 @@ async function mostrarTarefas() {
         let id = item.id
         novaLi = novaLi +
             `<li class="task">
-                <img src="../public/checked.png" alt="check-na-tarefa" onclick="editarItem('${item.id}', ${item.done})">
+                <img src="img/checked.png" alt="check-na-tarefa" onclick="editarItem('${item.id}', ${item.done})">
                 ${item.done ? `<s>${item.description}</s>` : `<p>${item.description}</p>`}
-                <img src="../public/trash.png" alt="tarefa-para-o-lixo" onclick="deletarItem('${id}')">
+                <img src="img/trash.png" alt="tarefa-para-o-lixo" onclick="deletarItem('${id}')">
             </li>`
-        //console.log(item.id)
     })
 
     listaCompleta.innerHTML = novaLi
 
     localStorage.setItem('lista', JSON.stringify(minhaListaDeItens))
-}
-
-async function concluirTarefa(posicao) {
-    //minhaListaDeItens[posicao].concluida = !minhaListaDeItens[posicao].concluida
-
-    mostrarTarefas()
 }
 
 async function deletarItem(id) {
@@ -93,10 +81,6 @@ async function editarItem(id, currentDone) {
         console.error('Erro:', error);
     }
     
-    // const novoTexto = prompt('Digite o novo texto da tarefa')
-
-    // minhaListaDeItens[posicao].tarefa = novoTexto
-
     mostrarTarefas()
 }
 
