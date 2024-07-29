@@ -7,14 +7,14 @@ const baseUrl = 'https://us-central1-crud-firebase-4bea8.cloudfunctions.net/api'
 
 async function adicionarNovaTarefa() {
 
-    fetch("https://us-central1-crud-firebase-4bea8.cloudfunctions.net/api/todos", {
+    await fetch("https://us-central1-crud-firebase-4bea8.cloudfunctions.net/api/todos", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+            "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          description: input.value,
-          done: false,
+            description: input.value,
+            done: false,
         }),
     })
 
@@ -27,34 +27,27 @@ async function adicionarNovaTarefa() {
     mostrarTarefas()
 }
 
-function mostrarTarefas() {
+
+async function mostrarTarefas() {
     let novaLi = ''
     // adiciona a tarefa na lista vindo do back
 
-    fetch("https://us-central1-crud-firebase-4bea8.cloudfunctions.net/api/todos")
-    .then((response) => response.json())
-    .then((data) => {
-        minhaListaDeItens = data
-        console.log(data)
-    }
-    )
+    await fetch("https://us-central1-crud-firebase-4bea8.cloudfunctions.net/api/todos")
+        .then((response) => response.json())
+        .then((data) => {
+            minhaListaDeItens = data
+            console.log(data)
+        }
+        )
 
     minhaListaDeItens.forEach((item, posicao) => {
-        
-
         let id = item.id
-        
-        novaLi =
-            novaLi +
-            `
-        
-        <li class="task">
-            <img src="../public/checked.png" alt="check-na-tarefa" onclick="concluirTarefa(${posicao})">
-            <p>${item.description}</p>
-            <img src="../public/trash.png" alt="tarefa-para-o-lixo" onclick="deletarItem('${id}')">
-        </li>
-        
-        `
+        novaLi = novaLi +
+            `<li class="task">
+                <img src="../public/checked.png" alt="check-na-tarefa" onclick="editarItem('${item.id}', ${item.done})">
+                ${item.done ? `<s>${item.description}</s>` : `<p>${item.description}</p>`}
+                <img src="../public/trash.png" alt="tarefa-para-o-lixo" onclick="deletarItem('${id}')">
+            </li>`
         //console.log(item.id)
     })
 
@@ -85,16 +78,21 @@ async function deletarItem(id) {
     }
 }
 
-async function editarItem(posicao) {
-    fetch("https://us-central1-crud-firebase-4bea8.cloudfunctions.net/api/todos/${id}", {
-        method: "PUT",
-        body: JSON.stringify({
-            done: true,
-          }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      })
+async function editarItem(id, currentDone) {
+    try {
+        await fetch(`https://us-central1-crud-firebase-4bea8.cloudfunctions.net/api/todos/${id}`, {
+            method: "PUT",
+            body: JSON.stringify({
+                done: !currentDone,
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+            },
+        })
+    } catch (error) {
+        console.error('Erro:', error);
+    }
+    
     // const novoTexto = prompt('Digite o novo texto da tarefa')
 
     // minhaListaDeItens[posicao].tarefa = novoTexto

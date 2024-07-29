@@ -51,7 +51,7 @@ exports.api = functions.https.onRequest(app);
 
 //edit
 app.put('/todos/:todoId', (req, res) => {
-    db.doc(req.params.todoId).update({ description: req.body.description })
+    db.doc(req.params.todoId).update({ done: req.body.done })
         .then(function () {
             res.json({ message: 'updated successfully' });
         })
